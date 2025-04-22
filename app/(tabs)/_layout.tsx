@@ -1,45 +1,32 @@
-import { Tabs } from 'expo-router';
 import React from 'react';
-import { Platform } from 'react-native';
+import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
+import Index from "@/app/(tabs)/index";
+import NewsByTitle from "@/app/(tabs)/NewsByTitle";
+import {Ionicons} from "@expo/vector-icons";
+import NewsByKeyword from "@/app/(tabs)/NewsByKeyword";
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+const Tab = createBottomTabNavigator();
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+const RootLayout = () => {
+    return (
+        <Tab.Navigator screenOptions={{ headerShown: false }}>
+           <Tab.Screen name={"index"} component={Index} options={{
+               tabBarIcon: ({ focused, size, color }) => (
+                   <Ionicons name={"home"} size={size} color={color} />
+               )
+           }}/>
+           <Tab.Screen name={"NewsByTitle"} component={NewsByTitle} options={{
+               tabBarIcon: ({ focused, size, color }) => (
+                   <Ionicons name={"newspaper"} size={size} color={color} />
+               )
+           }}/>
+            <Tab.Screen name={"NewsByKeyword"} component={NewsByKeyword} options={{
+                tabBarIcon: ({ focused, size, color }) => (
+                    <Ionicons name={"newspaper"} size={size} color={color} />
+                )
+            }}/>
+        </Tab.Navigator>
+    );
+};
 
-  return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
-  );
-}
+export default RootLayout;
